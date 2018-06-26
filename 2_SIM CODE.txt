@@ -1,0 +1,115 @@
+from numpy import *
+import matplotlib.pyplot as plotting
+
+global characteristics
+global number_of_data, answer
+
+f = open("INPUT.txt", "r")
+
+print("\t\tSTEADY INFILTRATION MODEL (SIM) \n")
+for line in f:
+    characteristics = line.split(',')
+    number_of_data = len(characteristics)
+    print("Total number of data = ", number_of_data)
+
+f.close()
+
+IMD = float(characteristics[0])
+Sav = float(characteristics[1])
+ks = float(characteristics[2])
+rain = float(characteristics[3])
+
+t = [0.0 for i in range(number_of_data - 4)]
+F = [0.0 for i in range(number_of_data - 4)]
+fp = [0.0 for i in range(number_of_data - 4)]
+
+x_t = [0.0 for i in range(number_of_data - 2)]
+y_fp = [0.0 for i in range(number_of_data - 2)]
+
+Fs = (Sav * IMD * ks) / (rain - ks)
+ts = Fs / rain
+ts_dash = (Fs - (IMD * Sav) * log((Fs + IMD * Sav) / (IMD * Sav))) / ks
+
+for i in range(4, number_of_data, 1):
+    t[i - 4] = float(characteristics[i])
+
+Fs = round(Fs, 3)
+ts = round(ts, 3)
+ts_dash = round(ts_dash, 2)
+
+f_out = open("OUTPUT.txt", "w")
+
+print("Initial Moisture Deficit(IMD) =  ", IMD)
+print("Average Suction Head (Sav) =  ",  Sav)
+print("Saturated Hydraulic Conductivity/Permeability (ks) =  " ,  ks)
+print("Rainfall Intensity (I) =  " ,  rain)
+print("Infiltration volume to make surface just pounded(Fs) = ", Fs)
+print("Time of surface ponding(ts)= ", ts)
+print("Time to infiltrate Fs in initially pounded soil (ts_dash) = ", ts_dash)
+
+f_out.write("\t\tSTEADY INFILTRATION MODEL (SIM) \n\n")
+f_out.write("Initial Moisture Deficit(IMD) =  ")
+f_out.write(str(IMD))
+f_out.write("\nAverage Suction Head (Sav) =  ")
+f_out.write(str(Sav))
+f_out.write("\nSaturated Hydraulic Conductivity/Permeability (ks) =  ")
+f_out.write(str(ks))
+f_out.write("\nRainfall Intensity (I) =  ")
+f_out.write(str(rain))
+
+f_out.write("\nInfiltration volume to make surface just pounded(Fs) = ")
+f_out.write(str(Fs))
+f_out.write("\nTime of surface ponding(ts)=  ")
+f_out.write(str(ts))
+f_out.write("\nTime to infiltrate Fs in initially pounded soil (ts_dash) =  ")
+f_out.write(str(ts_dash))
+
+x_t[0] = 0
+y_fp[0] = rain
+
+x_t[1] = ts
+y_fp[1] = rain
+
+for i in range(0, number_of_data - 4, 1):
+    RHS = ks * (t[i] - ts + ts_dash)
+    F[i] = Fs
+    numerator = 0.005
+
+    while abs(numerator) >= 0.001:
+        LHS = F[i] - (IMD * Sav) * log(1 + F[i] / (Sav * IMD))
+        numerator = LHS - RHS
+        denominator = 1 - 1/(1 + F[i]/(Sav * IMD))  # Derivative of M & L equation w.r.t. F
+        if F[i] == 0:
+            continue
+        answer = F[i] - (numerator/denominator)
+        F[i] = answer
+
+    F[i] = answer
+    fp[i] = ks * (1 + (Sav * IMD) / F[i])
+
+    F[i] = round(F[i], 3)
+    fp[i] = round(fp[i], 3)
+
+    x_t[i + 2] = t[i]
+    y_fp[i + 2] = fp[i]
+
+    print("For t = ", t[i])
+    print("F = ", F[i], "\t", "fp = ", fp[i])
+
+f_out.write("\nInfiltration_Volume(F) =  ")
+f_out.write(str(F))
+f_out.write("\nt_in_X_axis = \t")
+f_out.write(str(x_t))
+f_out.write("\nfp_in_Y_axis = \t")
+f_out.write(str(y_fp))
+
+f_out.close()
+
+plotting.plot(x_t, y_fp)
+plotting.title("Infiltration Curve")
+plotting.xlabel("time (t), hr")
+plotting.ylabel("Infiltration capacity (fp), cm/hr")
+plotting.savefig("Graph.png", bbox_inches="tight")
+plotting.show()
+
+input("End of Model...Press Enter to exit...")

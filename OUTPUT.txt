@@ -1,0 +1,12 @@
+		STEADY INFILTRATION MODEL (SIM) 
+
+Initial Moisture Deficit(IMD) =  0.25
+Average Suction Head (Sav) =  22.4
+Saturated Hydraulic Conductivity/Permeability (ks) =  0.044
+Rainfall Intensity (I) =  0.5
+Infiltration volume to make surface just pounded(Fs) = 0.54
+Time of surface ponding(ts)=  1.081
+Time to infiltrate Fs in initially pounded soil (ts_dash) =  0.56
+Infiltration_Volume(F) =  [0.599, 0.643, 0.684, 0.724, 0.761, 0.797, 0.832, 0.865, 0.898, 0.929, 0.96, 1.018, 1.046, 1.101, 1.179, 1.301, 1.413, 1.519, 1.62, 1.716, 1.808, 1.896, 1.982, 2.065, 2.145, 2.224, 2.3, 2.375, 2.448]
+t_in_X_axis = 	[0, 1.081, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.4, 2.5, 2.7, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0]
+fp_in_Y_axis = 	[0.5, 0.5, 0.456, 0.427, 0.404, 0.385, 0.368, 0.353, 0.34, 0.329, 0.318, 0.309, 0.301, 0.286, 0.279, 0.268, 0.253, 0.233, 0.218, 0.206, 0.196, 0.188, 0.18, 0.174, 0.168, 0.163, 0.159, 0.155, 0.151, 0.148, 0.145]

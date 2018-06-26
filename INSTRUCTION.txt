@@ -1,0 +1,3 @@
+In the input.txt file enter data in the following pattern (after first four data enter as many time
+as you want)
+IMD,Sav,ks,rain,t1,t2,t3,t4,t5,...,tn
